@@ -10,10 +10,17 @@
   "dependencies": {
     "-": "^0.0.1",
     "D": "^1.0.0",
+    "axios": "^0.25.0",
+    "connect-mongo": "^4.6.0",
+    "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
     "express": "^4.17.2",
     "express-ejs-layouts": "^2.5.1",
-    "laravel-mix": "^6.0.41"
+    "express-flash": "^0.0.2",
+    "express-session": "^1.17.2",
+    "laravel-mix": "^6.0.41",
+    "mongoose": "^6.2.0",
+    "noty": "^3.2.0-beta-deprecated"
   },
   "devDependencies": {
     "nodemon": "^2.0.15",
