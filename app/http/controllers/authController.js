@@ -8,6 +8,15 @@ function authController() {
       res.render("auth/login");
     },
     postLogin(req, res, next) {
+      // validate request field
+      const { email, password } = req.body;
+
+      // validation request
+      if (!email || !password) {
+        req.flash("error", "All fields are required");
+        return res.redirect("/login");
+      }
+
       passport.authenticate("local", (err, user, info) => {
         if (err) {
           req.flash("error", info.message);
@@ -69,6 +78,10 @@ function authController() {
 
         return res.redirect("/register");
       }
+    },
+    logout(req, res) {
+      req.logout();
+      return res.redirect("/login");
     },
   };
 }
