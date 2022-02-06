@@ -11,6 +11,7 @@
     "-": "^0.0.1",
     "D": "^1.0.0",
     "axios": "^0.25.0",
+    "bcrypt": "^5.0.1",
     "connect-mongo": "^4.6.0",
     "dotenv": "^16.0.0",
     "ejs": "^3.1.6",
@@ -20,7 +21,9 @@
     "express-session": "^1.17.2",
     "laravel-mix": "^6.0.41",
     "mongoose": "^6.2.0",
-    "noty": "^3.2.0-beta-deprecated"
+    "noty": "^3.2.0-beta-deprecated",
+    "passport": "^0.5.2",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15",

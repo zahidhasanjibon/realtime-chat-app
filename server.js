@@ -8,12 +8,12 @@ const session = require("express-session");
 const dotenv = require("dotenv");
 const flash = require("express-flash");
 const MongoDbSessionStore = require("connect-mongo");
+const passport = require("passport");
 
 // main
 const app = express();
 const PORT = process.env.PORT || 3000;
 dotenv.config();
-app.use(express.json());
 
 // mongodb connecction
 mongoose
@@ -37,18 +37,26 @@ app.use(
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
   })
 );
+// passport config
+const passportInit = require("./app/config/passport");
+passportInit(passport);
+app.use(passport.initialize());
+app.use(passport.session());
 // global middleware
 app.use((req, res, next) => {
   res.locals.session = req.session;
   next();
 });
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(flash());
+app.use(expressLayout);
+app.use(express.static(path.join(__dirname, "public")));
 
 // set template engine
-app.use(expressLayout);
+
 app.set("views", path.join(__dirname, "/resources/views"));
 app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname, "public")));
 
 // require all web routes
 require("./routes/web")(app);
