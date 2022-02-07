@@ -12,7 +12,7 @@ const passport = require("passport");
 
 // main
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
 dotenv.config();
 
 // mongodb connecction
@@ -52,7 +52,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(flash());
 app.use(expressLayout);
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("public"));
 
 // set template engine
 
