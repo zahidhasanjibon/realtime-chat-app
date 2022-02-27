@@ -13,7 +13,6 @@ function orderController() {
       )
         .populate("customerId", "-password")
         .exec((err, orders) => {
-          console.log(req.xhr);
           if (req.xhr) {
             return res.json(orders);
           }

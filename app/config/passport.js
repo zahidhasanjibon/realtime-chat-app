@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 function init(passport) {
   passport.use(
     new LocalStrategy(
-      { usernameField: "email" },
+      { usernameField: "email" }, // by default username hoi
       async (email, password, done) => {
         // login logic
         // check email exist in mongodb
