@@ -1,41 +1,43 @@
 import axios from "axios";
 import moment from "moment";
+import Noty from "noty";
 
-export function initAdmin() {
+export function initAdmin(socket) {
   const orderTableBody = document.querySelector("#orderTableBody");
-  let orders = [];
-  let markup;
+  if (orderTableBody) {
+    let orders = [];
+    let markup;
 
-  axios
-    .get("/admin/orders", {
-      headers: {
-        "X-Requested-With": "XMLHttpRequest",
-      },
-    })
-    .then((res) => {
-      orders = res.data;
-      markup = generateMarkup(orders);
-      orderTableBody.innerHTML = markup;
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    axios
+      .get("/admin/orders", {
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+        },
+      })
+      .then((res) => {
+        orders = res.data;
+        markup = generateMarkup(orders);
+        orderTableBody.innerHTML = markup;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
 
-  function renderItems(items) {
-    let parsedItems = Object.values(items);
-    return parsedItems
-      .map((menuItem) => {
-        return `
+    function renderItems(items) {
+      let parsedItems = Object.values(items);
+      return parsedItems
+        .map((menuItem) => {
+          return `
                 <p>${menuItem.item.name} - ${menuItem.qty} pcs </p>
             `;
-      })
-      .join("");
-  }
+        })
+        .join("");
+    }
 
-  function generateMarkup(orders) {
-    return orders
-      .map((order) => {
-        return `
+    function generateMarkup(orders) {
+      return orders
+        .map((order) => {
+          return `
                 <tr>
                 <td class="border px-4 py-2 text-green-900">
                     <p>${order._id}</p>
@@ -96,7 +98,20 @@ export function initAdmin() {
                     ${order.paymentStatus ? "paid" : "Not paid"}
                 </td>
             </tr>`;
-      })
-      .join("");
+        })
+        .join("");
+    }
+    socket.on("orderPlaced", (order) => {
+      orders.unshift(order);
+      orderTableBody.innerHTML = "";
+      orderTableBody.innerHTML = generateMarkup(orders);
+
+      new Noty({
+        type: "success",
+        timeout: 1000,
+        progressBar: false,
+        text: "New order Placed",
+      }).show();
+    });
   }
 }

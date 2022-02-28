@@ -2,6 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import Noty from "noty";
 import { initAdmin } from "./admin";
+const socket = io();
 
 const addToCart = document.querySelectorAll(".add-to-cart");
 const cartCounter = document.querySelector("#cartCounter");
@@ -42,7 +43,8 @@ if (alertMsg) {
   }, 2000);
 }
 
-initAdmin();
+// for admin page markup
+initAdmin(socket);
 
 // single product update status
 
@@ -53,6 +55,10 @@ order = JSON.parse(order);
 let time = document.createElement("small");
 
 const updateStatus = (order) => {
+  statuses.forEach((status) => {
+    status.classList.remove("step-completed");
+    status.classList.remove("current");
+  });
   let stepCompleted = true;
   statuses.forEach((status) => {
     let dataProp = status.dataset.status;
@@ -70,3 +76,29 @@ const updateStatus = (order) => {
   });
 };
 updateStatus(order);
+
+// socket
+
+// join
+if (order) {
+  socket.emit("join", `order_${order._id}`);
+}
+socket.on("orderUpdated", (data) => {
+  const updatedOrder = { ...order };
+  updatedOrder.updatedAt = moment().format();
+  updatedOrder.status = data.status;
+  updateStatus(updatedOrder);
+  new Noty({
+    type: "success",
+    timeout: 1000,
+    progressBar: false,
+    text: "Order Updated",
+  }).show();
+});
+
+// for admin order page real time data update
+
+let adminAreaPath = window.location.pathname;
+if (adminAreaPath.includes("admin")) {
+  socket.emit("join", "adminRoom");
+}

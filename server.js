@@ -9,6 +9,7 @@ const dotenv = require("dotenv");
 const flash = require("express-flash");
 const MongoDbSessionStore = require("connect-mongo");
 const passport = require("passport");
+const Emitter = require("events");
 
 // main
 const app = express();
@@ -24,6 +25,10 @@ mongoose
   })
   .then(() => console.log("database connection successful!"))
   .catch((err) => console.log(err));
+
+// Events emitter
+const eventEmitter = new Emitter();
+app.set("eventEmitter", eventEmitter);
 
 // session config
 app.use(
@@ -62,6 +67,22 @@ app.set("view engine", "ejs");
 // require all web routes
 require("./routes/web")(app);
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
   console.log(`port listening on ${PORT}`);
+});
+
+const io = require("socket.io")(server);
+io.on("connection", (socket) => {
+  console.log(`new connection`);
+  socket.on("join", (roomName) => {
+    console.log(roomName);
+    socket.join(roomName);
+  });
+});
+
+eventEmitter.on("orderUpdated", (data) => {
+  io.to(`order_${data.id}`).emit("orderUpdated", data);
+});
+eventEmitter.on("orderPlaced", (data) => {
+  io.to("adminRoom").emit("orderPlaced", data);
 });
