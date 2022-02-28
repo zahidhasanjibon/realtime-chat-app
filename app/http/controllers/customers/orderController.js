@@ -33,11 +33,18 @@ function orderController(req, res) {
         const orderData = await order.save();
         req.flash("success", "Order placed successfully");
         delete req.session.cart;
-        return res.redirect("/customerorders");
+        return res.redirect("/customer/orders");
       } catch (err) {
         req.flash("error", "server side error");
         return res.redirect("/cart");
       }
+    },
+    async show(req, res) {
+      const order = await Order.findById(req.params.id);
+      if (req.user._id.toString() === order.customerId.toString()) {
+        return res.render("customers/singleOrder", { order: order });
+      }
+      return res.redirect("/");
     },
   };
 }
