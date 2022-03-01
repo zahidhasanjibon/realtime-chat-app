@@ -2284,9 +2284,8 @@ if (alertMsg) {
     alertMsg.remove();
   }, 2000);
 } // for admin page markup
+// single product update status
 
-
-(0,_admin__WEBPACK_IMPORTED_MODULE_3__.initAdmin)(socket); // single product update status
 
 var statuses = document.querySelectorAll(".status-line");
 var hiddenInput = document.querySelector("#hiddenInput");
@@ -2343,6 +2342,7 @@ socket.on("orderUpdated", function (data) {
 var adminAreaPath = window.location.pathname;
 
 if (adminAreaPath.includes("admin")) {
+  (0,_admin__WEBPACK_IMPORTED_MODULE_3__.initAdmin)(socket);
   socket.emit("join", "adminRoom");
 }
 

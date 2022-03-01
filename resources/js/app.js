@@ -44,7 +44,6 @@ if (alertMsg) {
 }
 
 // for admin page markup
-initAdmin(socket);
 
 // single product update status
 
@@ -100,5 +99,6 @@ socket.on("orderUpdated", (data) => {
 
 let adminAreaPath = window.location.pathname;
 if (adminAreaPath.includes("admin")) {
+  initAdmin(socket);
   socket.emit("join", "adminRoom");
 }
