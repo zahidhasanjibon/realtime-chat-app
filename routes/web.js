@@ -4,6 +4,7 @@ const cartController = require("../app/http/controllers/customers/cartController
 const orderController = require("../app/http/controllers/customers/orderController");
 const AdminOrderController = require("../app/http/controllers/admin/orderController");
 const statusController = require("../app/http/controllers/admin/statusController");
+const productController = require("./api");
 
 // middlewares for routes protection
 const guest = require("../app/http/middlewares/guest");
@@ -33,59 +34,8 @@ function initRoutes(app) {
   app.post("/admin/orders/status", admin, statusController().update);
 
   // order increment decrement delete api routes
-  app.post("/delete_cart_product", (req, res) => {
-    let productQty = req.session.cart.items[req.body.id].qty;
-    let productTotalPrice =
-      req.session.cart.items[req.body.id].qty *
-      req.session.cart.items[req.body.id].item.price;
-
-    if (req.session.cart) {
-      req.session.cart.totalQty = req.session.cart.totalQty - productQty;
-      req.session.cart.totalPrice =
-        req.session.cart.totalPrice - productTotalPrice;
-      delete req.session.cart.items[req.body.id];
-    }
-
-    return res.json({
-      totalQty: req.session.cart.totalQty,
-      totalPrice: req.session.cart.totalPrice,
-    });
-  });
-  app.post("/increment_cart_product", (req, res) => {
-    if (req.session.cart) {
-      req.session.cart.items[req.body.id].qty =
-        req.session.cart.items[req.body.id].qty + 1;
-
-      req.session.cart.totalQty = req.session.cart.totalQty + 1;
-      req.session.cart.totalPrice =
-        req.session.cart.totalPrice +
-        req.session.cart.items[req.body.id].item.price;
-    }
-    return res.json({
-      productPrice:
-        req.session.cart.items[req.body.id].qty *
-        req.session.cart.items[req.body.id].item.price,
-      totalPrice: req.session.cart.totalPrice,
-      totalQty: req.session.cart.totalQty,
-    });
-  });
-  app.post("/decrement_cart_product", (req, res) => {
-    if (req.session.cart) {
-      req.session.cart.items[req.body.id].qty =
-        req.session.cart.items[req.body.id].qty - 1;
-
-      req.session.cart.totalQty = req.session.cart.totalQty - 1;
-      req.session.cart.totalPrice =
-        req.session.cart.totalPrice -
-        req.session.cart.items[req.body.id].item.price;
-    }
-    return res.json({
-      productPrice:
-        req.session.cart.items[req.body.id].qty *
-        req.session.cart.items[req.body.id].item.price,
-      totalPrice: req.session.cart.totalPrice,
-      totalQty: req.session.cart.totalQty,
-    });
-  });
+  app.post("/delete_cart_product", productController().delete);
+  app.post("/increment_cart_product", productController().increment);
+  app.post("/decrement_cart_product", productController().decrement);
 }
 module.exports = initRoutes;
