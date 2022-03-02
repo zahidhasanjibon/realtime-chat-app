@@ -168,6 +168,47 @@ section.status {
   float: right;
   font-size: 14px;
 }
+.trash {
+  color: $primary;
+  font-size: 25px;
+  &:hover {
+    color: $primary-hover;
+    transform: scale(1.2);
+    cursor: pointer;
+    transition: $smooth;
+  }
+}
+.increment,
+.decrement {
+  background-color: $primary;
+  padding: 2px;
+  border-radius: 20%;
+  font-size: 16px;
+  &:hover {
+    cursor: pointer;
+    background-color: $primary-hover;
+    transition: $smooth;
+  }
+}
+
+.la-plus,
+.la-minus {
+  color: $pure;
+  padding: 2px;
+}
+.order-done {
+  position: relative;
+}
+.order-done::before {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background-color: blue;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
 
 // responsive
 

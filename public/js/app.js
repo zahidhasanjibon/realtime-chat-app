@@ -2237,6 +2237,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var noty__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! noty */ "./node_modules/noty/lib/noty.js");
 /* harmony import */ var noty__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(noty__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _admin__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./admin */ "./resources/js/admin.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
@@ -2344,6 +2356,82 @@ var adminAreaPath = window.location.pathname;
 if (adminAreaPath.includes("admin")) {
   (0,_admin__WEBPACK_IMPORTED_MODULE_3__.initAdmin)(socket);
   socket.emit("join", "adminRoom");
+} // increment decrement functionality for orders
+
+
+var cartAreaPath = window.location.pathname;
+
+if (cartAreaPath.includes("cart")) {
+  // increment functionality
+  var incrementCounterBtn = document.getElementsByClassName("increment");
+
+  _toConsumableArray(incrementCounterBtn).forEach(function (incrementBtn) {
+    incrementBtn.addEventListener("click", function (e) {
+      var totalPrice = document.querySelector("#totalPrice");
+      var productPriceWrapper = e.target.closest(".product-wrapper");
+      var productPrice = productPriceWrapper.querySelector(".product-price");
+      var counter = incrementBtn.previousElementSibling;
+      var count = +counter.innerText;
+      counter.innerText = count + 1;
+      var productId = e.target.parentElement.dataset.pizzaid;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("/increment_cart_product", {
+        id: productId
+      }).then(function (res) {
+        totalPrice.innerText = "$".concat(res.data.totalPrice);
+        productPrice.innerText = "$".concat(res.data.productPrice);
+        cartCounter.innerText = res.data.totalQty;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    });
+  }); // decrement functionality
+
+
+  var decrementCounterBtn = document.getElementsByClassName("decrement");
+
+  _toConsumableArray(decrementCounterBtn).forEach(function (decrementBtn) {
+    decrementBtn.addEventListener("click", function (e) {
+      var totalPrice = document.querySelector("#totalPrice");
+      var productPriceWrapper = e.target.closest(".product-wrapper");
+      var productPrice = productPriceWrapper.querySelector(".product-price");
+      var counter = decrementBtn.nextElementSibling;
+      var count = +counter.innerText;
+
+      if (count === 1) {
+        return;
+      }
+
+      counter.innerText = count - 1;
+      var productId = e.target.parentElement.dataset.pizzaid;
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("/decrement_cart_product", {
+        id: productId
+      }).then(function (res) {
+        totalPrice.innerText = "$".concat(res.data.totalPrice);
+        productPrice.innerText = "$".concat(res.data.productPrice);
+        cartCounter.innerText = res.data.totalQty;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    });
+  }); // product delete functionality
+
+
+  var allTrash = document.getElementsByClassName("trash");
+
+  _toConsumableArray(allTrash).forEach(function (trash) {
+    trash.addEventListener("click", function (e) {
+      var productId = e.target.parentElement.dataset.pizzaid;
+      e.target.closest(".flex").remove();
+      axios__WEBPACK_IMPORTED_MODULE_0___default().post("/delete_cart_product", {
+        id: productId
+      }).then(function (res) {
+        cartCounter.innerText = res.data.totalQty;
+        totalPrice.innerText = res.data.totalPrice;
+      })["catch"](function (err) {
+        console.log(err);
+      });
+    });
+  });
 }
 
 /***/ }),

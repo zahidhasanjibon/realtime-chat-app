@@ -102,3 +102,83 @@ if (adminAreaPath.includes("admin")) {
   initAdmin(socket);
   socket.emit("join", "adminRoom");
 }
+
+// increment decrement functionality for orders
+let cartAreaPath = window.location.pathname;
+if (cartAreaPath.includes("cart")) {
+  // increment functionality
+  let incrementCounterBtn = document.getElementsByClassName("increment");
+  [...incrementCounterBtn].forEach((incrementBtn) => {
+    incrementBtn.addEventListener("click", (e) => {
+      let totalPrice = document.querySelector("#totalPrice");
+      let productPriceWrapper = e.target.closest(".product-wrapper");
+      let productPrice = productPriceWrapper.querySelector(".product-price");
+      let counter = incrementBtn.previousElementSibling;
+      let count = +counter.innerText;
+      counter.innerText = count + 1;
+      let productId = e.target.parentElement.dataset.pizzaid;
+      axios
+        .post("/increment_cart_product", {
+          id: productId,
+        })
+        .then((res) => {
+          totalPrice.innerText = `$${res.data.totalPrice}`;
+          productPrice.innerText = `$${res.data.productPrice}`;
+          cartCounter.innerText = res.data.totalQty;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  });
+
+  // decrement functionality
+  let decrementCounterBtn = document.getElementsByClassName("decrement");
+  [...decrementCounterBtn].forEach((decrementBtn) => {
+    decrementBtn.addEventListener("click", (e) => {
+      let totalPrice = document.querySelector("#totalPrice");
+      let productPriceWrapper = e.target.closest(".product-wrapper");
+      let productPrice = productPriceWrapper.querySelector(".product-price");
+
+      let counter = decrementBtn.nextElementSibling;
+      let count = +counter.innerText;
+      if (count === 1) {
+        return;
+      }
+      counter.innerText = count - 1;
+      let productId = e.target.parentElement.dataset.pizzaid;
+      axios
+        .post("/decrement_cart_product", {
+          id: productId,
+        })
+        .then((res) => {
+          totalPrice.innerText = `$${res.data.totalPrice}`;
+          productPrice.innerText = `$${res.data.productPrice}`;
+          cartCounter.innerText = res.data.totalQty;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  });
+
+  // product delete functionality
+
+  let allTrash = document.getElementsByClassName("trash");
+  [...allTrash].forEach((trash) => {
+    trash.addEventListener("click", (e) => {
+      let productId = e.target.parentElement.dataset.pizzaid;
+      e.target.closest(".flex").remove();
+
+      axios
+        .post("/delete_cart_product", { id: productId })
+        .then((res) => {
+          cartCounter.innerText = res.data.totalQty;
+          totalPrice.innerText = res.data.totalPrice;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  });
+}

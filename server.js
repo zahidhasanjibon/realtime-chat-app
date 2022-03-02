@@ -18,7 +18,7 @@ dotenv.config();
 
 // mongodb connecction
 mongoose
-  .connect("mongodb://localhost/pizza", {
+  .connect(process.env.MONGO_CONNECTION_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     family: 4,
@@ -36,7 +36,7 @@ app.use(
     secret: process.env.COOKIE_SECRET,
     resave: false,
     store: MongoDbSessionStore.create({
-      mongoUrl: "mongodb://127.0.0.1/pizza",
+      mongoUrl: process.env.SESSION_MONGO_URL,
     }),
     saveUninitialized: false,
     cookie: { maxAge: 1000 * 60 * 60 * 24 },
@@ -73,7 +73,7 @@ const server = app.listen(PORT, () => {
 
 const io = require("socket.io")(server);
 io.on("connection", (socket) => {
-  console.log(`new connection`);
+  console.log(`new socket.io connection`);
   socket.on("join", (roomName) => {
     console.log(roomName);
     socket.join(roomName);

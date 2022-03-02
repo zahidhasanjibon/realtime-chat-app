@@ -456,6 +456,52 @@ section.status {
   font-size: 14px;
 }
 
+.trash {
+  color: #fe5f1e;
+  font-size: 25px;
+}
+.trash:hover {
+  color: #b23301;
+  transform: scale(1.2);
+  cursor: pointer;
+  transition: all ease 0.3s;
+}
+
+.increment,
+.decrement {
+  background-color: #fe5f1e;
+  padding: 2px;
+  border-radius: 20%;
+  font-size: 16px;
+}
+.increment:hover,
+.decrement:hover {
+  cursor: pointer;
+  background-color: #b23301;
+  transition: all ease 0.3s;
+}
+
+.la-plus,
+.la-minus {
+  color: #fff;
+  padding: 2px;
+}
+
+.order-done {
+  position: relative;
+}
+
+.order-done::before {
+  content: "";
+  position: absolute;
+  height: 2px;
+  width: 100%;
+  background-color: blue;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
 @media (max-width: 1280px) {
   .px-12 {
     padding-left: 0px !important;
