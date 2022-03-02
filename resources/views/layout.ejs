@@ -56,7 +56,8 @@
               href="/cart"
             >
               <span id="cartCounter" class="text-white font-bold pr-2"
-                ><%= session.cart ? session.cart.totalQty : '' %></span
+                ><%= session.cart.totalQty > 0 ? session.cart.totalQty : ''
+                %></span
               >
               <img src="/img/cart.png"
             /></a>
