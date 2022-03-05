@@ -209,6 +209,27 @@ section.status {
   left: 0;
   transform: translateY(-50%);
 }
+// stripe card design
+.StripeElement {
+  box-sizing: border-box;
+  height: 40px;
+  width: 60%;
+  margin-left: auto;
+  padding: 10px 12px;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background-color: $pure;
+  box-shadow: 0 1px 3px 0 #e6ebf1;
+}
+.StripeElement--focus {
+  box-shadow: 0 1px 3px 0 #cfd7df;
+}
+.StripeElement--invalid {
+  border-color: #fa755a;
+}
+.StripeElement--webkit-autofill {
+  background-color: #fefde5 !important;
+}
 
 // responsive
 

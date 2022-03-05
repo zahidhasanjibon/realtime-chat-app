@@ -2,6 +2,7 @@ import axios from "axios";
 import moment from "moment";
 import Noty from "noty";
 import { initAdmin } from "./admin";
+import { initStripe } from "./stripe";
 const socket = io();
 
 const addToCart = document.querySelectorAll(".add-to-cart");
@@ -181,4 +182,10 @@ if (cartAreaPath.includes("cart")) {
         });
     });
   });
+}
+
+// payment functionality
+
+if (cartAreaPath.includes("cart")) {
+  initStripe();
 }

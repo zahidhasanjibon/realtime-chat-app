@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "-": "^0.0.1",
+    "@stripe/stripe-js": "^1.24.0",
     "D": "^1.0.0",
     "axios": "^0.25.0",
     "bcrypt": "^5.0.1",
@@ -26,7 +27,8 @@
     "noty": "^3.2.0-beta-deprecated",
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
-    "socket.io": "^4.4.1"
+    "socket.io": "^4.4.1",
+    "stripe": "^8.207.0"
   },
   "devDependencies": {
     "nodemon": "^2.0.15",

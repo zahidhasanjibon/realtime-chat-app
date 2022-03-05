@@ -55,10 +55,15 @@
               class="inline-block px-4 py-2 rounded-full flex items-center"
               href="/cart"
             >
+              <% if(session.cart) {%>
               <span id="cartCounter" class="text-white font-bold pr-2"
                 ><%= session.cart.totalQty > 0 ? session.cart.totalQty : ''
                 %></span
               >
+              <%} else {%>
+              <span id="cartCounter" class="text-white font-bold pr-2"> </span>
+              <% }%>
+
               <img src="/img/cart.png"
             /></a>
           </li>
