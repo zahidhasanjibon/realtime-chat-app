@@ -66,6 +66,9 @@ app.set("view engine", "ejs");
 
 // require all web routes
 require("./routes/web")(app);
+app.use((req, res) => {
+  res.status(404).render("errors/404");
+});
 
 const server = app.listen(PORT, () => {
   console.log(`port listening on ${PORT}`);
@@ -75,7 +78,6 @@ const io = require("socket.io")(server);
 io.on("connection", (socket) => {
   console.log(`new socket.io connection`);
   socket.on("join", (roomName) => {
-    console.log(roomName);
     socket.join(roomName);
   });
 });
